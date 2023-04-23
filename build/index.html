@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="upgrade-insecure-requests"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | Clock App</title>
+  </head>
+  <body class="font-[Inter] text-white">
+    <section class="relative min-h-screen w-full bg-black bg-cover bg-center">
+      <div
+        id="effect"
+        class="absolute top-0 hidden min-h-screen w-full bg-black opacity-[40%]"
+      ></div>
+      <div
+        id="content"
+        class="absolute top-0 grid h-full w-full grid-rows-[50%,50%,50%] overflow-hidden"
+      >
+        <div id="quote" class="flex items-start gap-4 p-4 md:p-16 lg:px-24">
+          <div class="">
+            <q
+              id="quoteText"
+              class="block text-[0.75rem] font-light leading-[22px] md:text-[1.125rem] md:leading-[28px]"
+              ><div class="h-10 w-[70vh] bg-gray-500 opacity-[30%]"></div>
+            </q>
+            <span
+              id="author"
+              class="text-[0.75rem] font-bold leading-[22px] md:text-[1.125rem] md:leading-[28px]"
+              ><div class="block h-10 w-[70vh] bg-gray-500 opacity-[30%]"></div
+            ></span>
+          </div>
+          <button
+            onclick="refreshQoute()"
+            class="w-[20px] bg-none pt-[6px] outline-none"
+          >
+            <img src="desktop/icon-refresh.svg" alt="" class="w-full" />
+          </button>
+        </div>
+        <div
+          id="clock"
+          class="flex flex-col justify-end gap-[30px] p-4 md:px-16 lg:flex-row lg:items-end lg:justify-between lg:px-24 lg:pb-[42px] lg:pt-0"
+        >
+          <div class="w-full lg:w-auto">
+            <div class="w-full">
+              <img id="monsun" src="" alt="" class="inline pr-3" />
+              <span
+                id="morningOrevening"
+                class="text-[0.938rem] leading-[25px] tracking-[3px] md:text-[1.125rem] md:leading-[28px] md:tracking-[3.6px]"
+                ><div class="h-10 w-full bg-gray-500 opacity-[30%]"></div>
+              </span>
+            </div>
+
+            <div class="mt-[15px] flex gap-[15px]">
+              <h1
+                class="mb-[15px] mt-[15px] text-[100px] font-bold leading-[100px] tracking-[-2.5px] md:text-[10.938rem] md:leading-[175px] md:tracking-[-4.38px]"
+              >
+                00:00
+              </h1>
+
+              <span
+                id="UTC"
+                class="self-end text-[15px] font-light leading-[28px] md:text-[2rem]"
+                ><div class="h-10 w-10 bg-gray-500 opacity-[30%]"></div
+              ></span>
+            </div>
+            <h2
+              id="cioc"
+              class="text-[0.938rem] font-bold leading-[28px] tracking-[3px] md:text-[1.125rem] md:tracking-[3.6px]"
+            >
+              <div class="mt-2 h-10 w-full bg-gray-500 opacity-[30%]"></div>
+            </h2>
+          </div>
+          <button
+            id="morelessbtn"
+            onclick="showDays()"
+            class="flex h-[39px] w-[115px] items-center justify-end rounded-[28px] bg-white p-[4px] outline-none md:h-[56px] md:w-[146px]"
+          >
+            <div class="g-[10px] flex items-center justify-between gap-[10px]">
+              <span
+                id="moreLessSpan"
+                class="text-[0.75rem] font-bold leading-[14px] tracking-[3.75px] text-black opacity-[50%] md:text-base md:leading-[28px] md:tracking-[5px]"
+                >MORE</span
+              >
+              <!-- circle -->
+              <div
+                id="circle"
+                class="flex h-[32px] w-[32px] items-center justify-center rounded-[100%] bg-[#303030] md:mr-[4px] md:h-[40px] md:w-[40px]"
+              >
+                <img src="desktop/icon-arrow-down.svg" alt="" id="arrowicon" />
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div
+          id="days"
+          class="grid grid-rows-[55px,55px,55px,55px] bg-[#000000bf] p-4 pt-11 md:grid-cols-[1fr,1fr] md:grid-rows-[auto] md:p-16 lg:grid-cols-[1fr,100px,1fr] lg:pt-10"
+        >
+          <div class="flex w-full justify-between md:flex-col md:justify-start">
+            <h3
+              class="text-[0.625rem] leading-[28px] tracking-[2px] md:text-[0.813rem] md:tracking-[2.6px] lg:text-[0.938rem] lg:tracking-[3px]"
+            >
+              CURRENT TIMEZONE
+            </h3>
+            <span
+              id="TIMEZONE"
+              class="text-[1.25rem] font-bold md:text-[2.5rem] lg:text-[3.5rem]"
+              ><div class="h-10 w-full bg-gray-500 opacity-[30%]"></div
+            ></span>
+          </div>
+          <div
+            class="flex w-full justify-between md:col-start-1 md:row-start-2 md:flex-col md:justify-start"
+          >
+            <h3
+              class="text-[0.625rem] leading-[28px] tracking-[2px] md:text-[0.813rem] md:tracking-[2.6px] lg:text-[0.938rem] lg:tracking-[3px]"
+            >
+              Day of the year
+            </h3>
+            <span
+              id="DayOfYear"
+              class="text-[1.25rem] font-bold md:text-[2.5rem] lg:text-[3.5rem]"
+              ><div class="h-10 w-full bg-gray-500 opacity-[30%]"></div>
+            </span>
+          </div>
+          <div
+            class="col-start-2 row-start-1 row-end-3 hidden h-[250px] w-[1px] bg-[#979797] opacity-[25%] lg:block"
+          ></div>
+          <div class="flex w-full justify-between md:flex-col md:justify-start">
+            <h3
+              class="text-[0.625rem] leading-[28px] tracking-[2px] md:text-[0.813rem] md:tracking-[2.6px] lg:text-[0.938rem] lg:tracking-[3px]"
+            >
+              Day of the week
+            </h3>
+            <span
+              id="DayOfweek"
+              class="text-[1.25rem] font-bold md:text-[2.5rem] lg:text-[3.5rem]"
+              ><div class="h-10 w-full bg-gray-500 opacity-[30%]"></div
+            ></span>
+          </div>
+          <div class="flex w-full justify-between md:flex-col md:justify-start">
+            <h3
+              class="text-[0.625rem] leading-[28px] tracking-[2px] md:text-[0.813rem] md:tracking-[2.6px] lg:text-[0.938rem] lg:tracking-[3px]"
+            >
+              Week number
+            </h3>
+            <span
+              id="WeekNum"
+              class="text-[1.25rem] font-bold md:text-[2.5rem] lg:text-[3.5rem]"
+              ><div class="h-10 w-full bg-gray-500 opacity-[30%]"></div
+            ></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="This.js"></script>
+  </body>
+</html>

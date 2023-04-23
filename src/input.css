@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  scroll-behavior: smooth;
+}
+#morelessbtn :hover {
+  color: #999999;
+}
+#morelessbtn :hover #circle {
+  background-color: #999999;
+}
+
+#clock {
+  transition: all ease-in-out 1.5s;
+}
+
+.bgNightsection {
+  background-image: url("../mobile/night.jpg");
+}
+.bgMorningsection {
+  background-image: url("../mobile/morning.jpg");
+}
+@media (min-width: 768px) {
+  .bgNightsection {
+    background-image: url("../tablet/night.jpg");
+  }
+  .bgMorningsection {
+    background-image: url("../tablet/morning.jpg");
+  }
+}
+
+@media (min-width: 1024px) {
+  .bgNightsection {
+    background-image: url("../desktop/night.jpg");
+  }
+  .bgMorningsection {
+    background-image: url("../desktop/morning.jpg");
+  }
+}
