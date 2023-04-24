@@ -6,6 +6,7 @@ const config = {
 let timezone;
 let flagtime;
 let call = 0;
+
 //Btn more&less
 function showDays() {
   let clockDiv = document.querySelector("#clock");
@@ -41,7 +42,6 @@ function refreshQoute() {
   ];
   //
   let index = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
-  console.log("this is index :", index);
 
   axios
     .get(
@@ -62,13 +62,12 @@ function refreshQoute() {
 
 //
 function getTimeZone() {
-  if (navigator.geolocation)
+  if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         let lat = position.coords.latitude;
         let long = position.coords.longitude;
         const url = `https://api.api-ninjas.com/v1/timezone?lat=${lat}&lon=${long}`;
-
         axios
           .get(url, config)
           .then((res) => {
@@ -83,6 +82,7 @@ function getTimeZone() {
       },
       () => alert("We cant specify the location")
     );
+  }
 }
 function getCurrentCity(lat, long) {
   let url = `https://api.api-ninjas.com/v1/reversegeocoding?lat=${lat}&lon=${long}`;
@@ -122,8 +122,6 @@ function getDaysOfWeksYears(timezone) {
   axios
     .get(`http://worldtimeapi.org/api/timezone/${timezone}`)
     .then((res) => {
-      //DynamicClock(res.data.datetime);
-
       document.getElementById("DayOfYear").innerHTML = res.data.day_of_year;
       document.getElementById("DayOfweek").innerHTML = res.data.day_of_week;
       document.getElementById("WeekNum").innerHTML = res.data.week_number;
@@ -185,4 +183,3 @@ function changeBackground() {
 }
 refreshQoute();
 getTimeZone();
-//getCurrentCity();
